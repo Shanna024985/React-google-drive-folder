@@ -1,3 +1,5 @@
 let express = require("express")
 let router = express.Router();
-router.get("/",)
+let controller = require("../controller/authController")
+router.post("/",controller.generateOauthWebSite)
+module.exports = router
