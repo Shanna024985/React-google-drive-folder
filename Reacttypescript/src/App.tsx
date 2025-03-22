@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { toast, Toaster } from "sonner";
 import { Input } from "./components/ui/input";
 import { LoginForm } from "./components/login-form";
-import { data, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { Link } from "react-router-dom";
 import MainPage from "./components/ui/mainPage";
 import { Testing } from "./components/ui/testing";

@@ -16,7 +16,19 @@ const MainPage = () => {
   let [classForCompletionScreen, setClassForCompletionScreen] = useState<string>("hidden")
   useEffect(() => {
     setProgress(50);
+    let url = new URL(document.URL);
+    let searchParams = url.searchParams;
+    let userId = searchParams.get("code");
+    console.log(userId)
+    fetch("http://localhost:5174/api/auth/"+userId)
+    .then((value)=>{
+      return value.json()
+    })
+    .then((value)=>[
+      localStorage.setItem("token",value)
+    ])
   }, []);
+
 
   return (
     <div className="w-screen px-5 self-start mt-4">
