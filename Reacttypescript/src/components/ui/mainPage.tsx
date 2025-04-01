@@ -1,10 +1,9 @@
 import { Progress } from "@/components/ui/progress";
 import { Button } from "./button";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Input } from "./input";
 import logo from "../../assets/Line.svg";
 import googleDrive from "../../assets/googleDrive.svg";
-
 import { Label } from "./label";
 import { createContext } from "react";
 import { CompletionScreen } from "./completionScreen";
@@ -13,39 +12,68 @@ export const updateProgressContext = createContext<Function | undefined>(
 );
 const MainPage = () => {
   let [progress, setProgress] = useState<number>(0);
-  let [classForCompletionScreen, setClassForCompletionScreen] = useState<string>("hidden")
+  let [classForCompletionScreen, setClassForCompletionScreen] =
+    useState<string>("hidden");
   useEffect(() => {
     setProgress(50);
-    let url = new URL(document.URL);
-    let searchParams = url.searchParams;
-    let userId = searchParams.get("code");
-    console.log(userId)
-    fetch("http://localhost:5174/api/auth/"+userId)
-    .then((value)=>{
-      return value.json()
-    })
-    .then((value)=>[
-      localStorage.setItem("token",value)
-    ])
-  }, []);
 
+    let token = localStorage.getItem("token");
+    let refresh_token = localStorage.getItem("refresh-token")
+    if (
+      token && refresh_token
+    ) {
+      document.getElementById("loggedIn")?.classList.remove("hidden");
+      document.getElementById("notloggedin")?.classList.add("hidden")
+    } else {
+      let url = new URL(document.URL);
+      let searchParams = url.searchParams;
+      let userId = searchParams.get("code");
+      console.log(userId);
+      document.getElementById("loggedIn")?.classList.add("hidden");
+      document.getElementById("notloggedin")?.classList.remove("hidden")
+      fetch("http://localhost:5174/api/auth/" + userId)
+      .then((value) => {
+        return value.json();
+      })
+      .then((value) => {
+        if (value.access_token && value.refresh_token) {
+          localStorage.setItem("token", value.access_token);
+          localStorage.setItem("refresh-token", value.refresh_token);
+          document.getElementById("loggedIn")?.classList.remove("hidden");
+          document.getElementById("notloggedin")?.classList.add("hidden")
+        }
+      })
+    }
+  }, []);
 
   return (
     <div className="w-screen px-5 self-start mt-4">
-      <Progress value={progress} />
-      <updateProgressContext.Provider value={setProgress}>
-        <StepOneOfAddingFolders setClassNameOfCompletionScren={setClassForCompletionScreen}/>
-      </updateProgressContext.Provider>
-      <CompletionScreen className={classForCompletionScreen}/>
+      <div id="loggedIn" className="hidden">
+        <Progress value={progress} />
+        <updateProgressContext.Provider value={setProgress}>
+          <StepOneOfAddingFolders
+            setClassNameOfCompletionScren={setClassForCompletionScreen}
+          />
+        </updateProgressContext.Provider>
+        <CompletionScreen className={classForCompletionScreen} />
+      </div>
+      <div id="notloggedin" className="flex flex-col justify-center">
+        <h1 className="text-center">403</h1>
+        <h5 className="text-center">Forbidden: You don't have permission to access this page</h5>
+      </div>
     </div>
   );
 };
 
 export default MainPage;
 
-function StepOneOfAddingFolders(props: {setClassNameOfCompletionScren: Function}) {
+
+function StepOneOfAddingFolders(props: {
+  setClassNameOfCompletionScren: Function;
+}) {
   const setProgressFunction = useContext(updateProgressContext);
-  let [classNameOfDiv, setClassNameOfDiv] = useState("")
+  let [classNameOfDiv, setClassNameOfDiv] = useState("");
+  let input: null | any = useRef(null)
   return (
     <div className={classNameOfDiv}>
       <h3 className="text-3xl mt-4 lg:mx-10">Step 1</h3>
@@ -77,14 +105,17 @@ function StepOneOfAddingFolders(props: {setClassNameOfCompletionScren: Function}
             type="text"
             placeholder="Enter url"
             className="placeholder:text-gray-100 text-gray-50 bg-gray-500 border-0"
+            ref={input}
           />
           <button
             className="text-center text-gray-50 mt-3"
             onClick={() => {
               if (typeof setProgressFunction === "function") {
-                setClassNameOfDiv("hidden")
-                props.setClassNameOfCompletionScren("")
+                setClassNameOfDiv("hidden");
+                props.setClassNameOfCompletionScren("");
                 setProgressFunction(100);
+                console.log(input.current.value)
+                
               }
             }}
           >
