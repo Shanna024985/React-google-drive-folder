@@ -28,6 +28,14 @@ module.exports.folderCreation = async (req, res, next) => {
 
                 }
             })
+            let response3 = await drive.files.create({
+                requestBody: {
+                    name: "Forms",
+                    parents: [url.slice(39)],
+                    mimeType: 'application/vnd.google-apps.folder'
+
+                }
+            })
             res.locals.proposalFolder = response.data
             res.locals.financeFolder = response2.data
             res.locals.authObject = authObj
