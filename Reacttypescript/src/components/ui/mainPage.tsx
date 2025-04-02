@@ -12,8 +12,9 @@ export const updateProgressContext = createContext<Function | undefined>(
 );
 const MainPage = () => {
   let [progress, setProgress] = useState<number>(0);
-  let [classForCompletionScreen, setClassForCompletionScreen] =
+  let [classForCompletionScreen, setClassForCompletionScreen] = 
     useState<string>("hidden");
+  let [urlForRedirect, setUrlForRedirect] = useState<string>("")
   useEffect(() => {
     setProgress(50);
 
@@ -53,9 +54,10 @@ const MainPage = () => {
         <updateProgressContext.Provider value={setProgress}>
           <StepOneOfAddingFolders
             setClassNameOfCompletionScren={setClassForCompletionScreen}
+            setUrlForRedirect={setUrlForRedirect}
           />
         </updateProgressContext.Provider>
-        <CompletionScreen className={classForCompletionScreen} />
+        <CompletionScreen className={classForCompletionScreen} urlForRedirect={urlForRedirect}/>
       </div>
       <div id="notloggedin" className="flex flex-col justify-center">
         <h1 className="text-center">403</h1>
@@ -69,7 +71,8 @@ export default MainPage;
 
 
 function StepOneOfAddingFolders(props: {
-  setClassNameOfCompletionScren: Function;
+  setClassNameOfCompletionScren: Function,
+  setUrlForRedirect: Function
 }) {
   const setProgressFunction = useContext(updateProgressContext);
   let [classNameOfDiv, setClassNameOfDiv] = useState("");
@@ -111,11 +114,31 @@ function StepOneOfAddingFolders(props: {
             className="text-center text-gray-50 mt-3"
             onClick={() => {
               if (typeof setProgressFunction === "function") {
-                setClassNameOfDiv("hidden");
-                props.setClassNameOfCompletionScren("");
-                setProgressFunction(100);
-                console.log(input.current.value)
+                let  bodyData = JSON.stringify({refresh_token: localStorage.getItem("refresh-token"),url:input.current.value})
+                console.log(bodyData)
+                let fetchData = {
+                  method: 'POST',
+                  body: bodyData,  
+                  headers: new Headers({
+                    'Content-Type': 'application/json; charset=UTF-8'
+                  })
+                }
                 
+                fetch("http://localhost:5174/api/drive",fetchData)
+                .then((value)=>{
+                  if (value.status === 400){
+                    console.error("Error 400")
+                  } else {
+                    return value.json();
+                  }
+                })
+                .then((value)=>{
+                  setClassNameOfDiv("hidden");
+                  props.setClassNameOfCompletionScren("");
+                  setProgressFunction(100);
+                  console.log(input.current.value)
+                  props.setUrlForRedirect(input.current.value)
+                })
               }
             }}
           >
