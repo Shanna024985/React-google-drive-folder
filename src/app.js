@@ -4,7 +4,7 @@ let cors = require("cors");
 const path = require('path');
 let app = express();
 app.use(cors({
-    origin: "http://localhost:5173"
+    origin: "https://google-drive-folder-creation.onrender.com"
 }))
 
 app.use(express.json());
