@@ -11,12 +11,12 @@ import { useState, useEffect } from "react";
 function App() {
   return (
     <>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/dashboard" element={<MainPage />}></Route>
-        <Route path="/testing" element={<Testing />}></Route>
-      </Routes>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/dashboard" element={<MainPage />}></Route>
+          <Route path="/testing" element={<Testing />}></Route>
+        </Routes>
     </>
   );
 }
@@ -28,13 +28,12 @@ function Home() {
   useEffect(() => {
     fetch("http://localhost:5174/api/testing")
       .then((res) => {
-        
-        return res.json()
+        return res.json();
       })
       .then((data) => {
         console.log(data);
         setData(data);
-      })
+      });
   }, []);
   return (
     <>
