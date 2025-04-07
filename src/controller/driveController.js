@@ -55,7 +55,7 @@ module.exports.folderCreation = async (req, res, next) => {
 }
 
 module.exports.addFiles = async (req,res,next) => {
-    let pathToAdd = path.join(__dirname, "Proposal", "ADS Bonding Day Risk Assessment.xlsx")
+    let pathToAdd = path.join(__dirname, "Proposal", "Risk Assessment.xlsx")
     let ra = drive.files.create({
     requestBody: {
         name: "Risk Assessment",
