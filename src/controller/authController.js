@@ -1,7 +1,7 @@
 const { OAuth2Client } = require("google-auth-library");
 const dotenv = require("dotenv");
 dotenv.config(); 
-const redirectUrl = "http://localhost:5173/dashboard"
+const redirectUrl = "https://google-drive-folder-creation.onrender.com/dashboard"
 const oauth2Client = new OAuth2Client(process.env.CLIENT_ID, process.env.CLIENT_SECRET, redirectUrl)
 module.exports.generateOauthWebSite = async (req, res, next) => {
   res.header("Referrer-Policy", "no-referrer-when-downgrade");
