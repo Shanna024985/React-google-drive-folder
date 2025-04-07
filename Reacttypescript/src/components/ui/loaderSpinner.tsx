@@ -44,7 +44,7 @@ const LoadingSpinner = React.forwardRef<HTMLDivElement, LoadingSpinnerProps>(
       <div
         data-testid="spinner"
         className={cn(
-          'h-4 w-4 text-[color:white] animate-spin flex items-center justify-center animate-spin',
+          'h-4 w-4 text-[color:white] flex items-center justify-center animate-spin',
           className
         )}
         ref={ref}
