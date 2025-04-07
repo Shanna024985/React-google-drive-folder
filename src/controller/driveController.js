@@ -36,6 +36,13 @@ module.exports.folderCreation = async (req, res, next) => {
 
                 }
             })
+            let response4 = await drive.files.create({
+                requestBody: {
+                    name: "Publicity",
+                    parents: [url.slice(39)],
+                    mimeType: 'application/vnd.google-apps.folder'
+                }
+            })
             res.locals.proposalFolder = response.data
             res.locals.financeFolder = response2.data
             res.locals.authObject = authObj
@@ -58,7 +65,7 @@ module.exports.addFiles = async (req,res,next) => {
         body: fs.createReadStream(pathToAdd),
     }
   })
-  let proposalPath = path.join(__dirname, "Proposal", "Bonding Day Proposal.docx")
+  let proposalPath = path.join(__dirname, "Proposal", "Proposal.docx")
   let proposal = await drive.files.create({
     requestBody: {
         name: "Proposal",

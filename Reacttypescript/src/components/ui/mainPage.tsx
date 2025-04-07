@@ -7,6 +7,7 @@ import googleDrive from "../../assets/googleDrive.svg";
 import { Label } from "./label";
 import { createContext } from "react";
 import { CompletionScreen } from "./completionScreen";
+import { LoadingSpinner } from "./loaderSpinner";
 export const updateProgressContext = createContext<Function | undefined>(
   undefined
 );
@@ -77,6 +78,8 @@ function StepOneOfAddingFolders(props: {
   const setProgressFunction = useContext(updateProgressContext);
   let [classNameOfDiv, setClassNameOfDiv] = useState("");
   let input: null | any = useRef(null)
+  let [classNameOfLoadingSpinner, setClassNameOfLoadingSpinner] = useState("hidden");
+  let [classNameOfButtonTitle, setClassNameOfButtonTitle] = useState("")
   return (
     <div className={classNameOfDiv}>
       <h3 className="text-3xl mt-4 lg:mx-10">Step 1</h3>
@@ -111,9 +114,11 @@ function StepOneOfAddingFolders(props: {
             ref={input}
           />
           <button
-            className="text-center text-gray-50 mt-3"
+            className="text-center text-gray-50 mt-3 flex-col"
             onClick={() => {
               if (typeof setProgressFunction === "function") {
+                setClassNameOfLoadingSpinner("");
+                setClassNameOfButtonTitle("hidden")
                 let  bodyData = JSON.stringify({refresh_token: localStorage.getItem("refresh-token"),url:input.current.value})
                 console.log(bodyData)
                 let fetchData = {
@@ -123,7 +128,6 @@ function StepOneOfAddingFolders(props: {
                     'Content-Type': 'application/json; charset=UTF-8'
                   })
                 }
-                
                 fetch("http://localhost:5174/api/drive",fetchData)
                 .then((value)=>{
                   if (value.status === 400){
@@ -142,7 +146,14 @@ function StepOneOfAddingFolders(props: {
               }
             }}
           >
-            Load file
+
+            <div className="flex justify-center">
+              <div className={classNameOfButtonTitle}>
+              Load file
+              </div>
+            <LoadingSpinner className={classNameOfLoadingSpinner}/>
+
+            </div>
           </button>
         </div>
       </div>

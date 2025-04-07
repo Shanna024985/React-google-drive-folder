@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import MainPage from "./components/ui/mainPage";
 import { Testing } from "./components/ui/testing";
 import { useState, useEffect } from "react";
+import { LoadingSpinner } from "./components/ui/loaderSpinner";
 
 function App() {
   return (
