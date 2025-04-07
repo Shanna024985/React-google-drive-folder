@@ -33,7 +33,7 @@ const MainPage = () => {
       console.log(userId);
       document.getElementById("loggedIn")?.classList.add("hidden");
       document.getElementById("notloggedin")?.classList.remove("hidden")
-      fetch("http://localhost:5174/api/auth/" + userId)
+      fetch("https://google-drive-folder-creation.onrender.com/api/auth/" + userId)
       .then((value) => {
         return value.json();
       })
@@ -128,7 +128,7 @@ function StepOneOfAddingFolders(props: {
                     'Content-Type': 'application/json; charset=UTF-8'
                   })
                 }
-                fetch("http://localhost:5174/api/drive",fetchData)
+                fetch("https://google-drive-folder-creation.onrender.com/api/drive",fetchData)
                 .then((value)=>{
                   if (value.status === 400){
                     console.error("Error 400")

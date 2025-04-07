@@ -12,7 +12,6 @@ module.exports.generateOauthWebSite = async (req, res, next) => {
 module.exports.getGoogleUserData = async (req, res, next) => {
   const code = "4/" + req.params.code
   try {
-    debugger
     fetch(`https://oauth2.googleapis.com/token?client_secret=${process.env.CLIENT_SECRET}&client_id=${process.env.CLIENT_ID}&grant_type=authorization_code&redirect_uri=https://google-drive-folder-creation.onrender.com/dashboard&code=${code}`, {
       method: "POST"
     })

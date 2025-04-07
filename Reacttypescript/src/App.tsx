@@ -26,7 +26,7 @@ export default App;
 function Home() {
   const [data, setData] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5174/api/testing")
+    fetch("https://google-drive-folder-creation.onrender.com/api/testing")
       .then((res) => {
         return res.json();
       })
