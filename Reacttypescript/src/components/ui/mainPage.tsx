@@ -136,7 +136,7 @@ function StepOneOfAddingFolders(props: {
                     return value.json();
                   }
                 })
-                .then((value)=>{
+                .then(()=>{
                   setClassNameOfDiv("hidden");
                   props.setClassNameOfCompletionScren("");
                   setProgressFunction(100);
