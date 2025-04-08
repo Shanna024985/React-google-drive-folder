@@ -55,16 +55,6 @@ module.exports.folderCreation = async (req, res, next) => {
 }
 
 module.exports.addFiles = async (req,res,next) => {
-    let pathToAdd = path.join(__dirname, "Proposal", "Risk Assessment.xlsx")
-    let ra = drive.files.create({
-    requestBody: {
-        name: "Risk Assessment",
-        parents: [res.locals.proposalFolder.id]
-    },
-    media: {
-        body: fs.createReadStream(pathToAdd),
-    }
-  })
   let proposalPath = path.join(__dirname, "Proposal", "Proposal.docx")
   let proposal = await drive.files.create({
     requestBody: {
