@@ -16,14 +16,14 @@ module.exports.folderCreation = async (req, res, next) => {
             let response = await drive.files.create({
                 requestBody: {
                     name: "Proposal", 
-                    parents: [url.slice(39)],
+                    parents: [url.slice(43)],
                     mimeType: 'application/vnd.google-apps.folder'
                 }
             })
             let response2 = await drive.files.create({
                 requestBody: {
                     name: "Finance and Logistics",
-                    parents: [url.slice(39)],
+                    parents: [url.slice(43)],
                     mimeType: 'application/vnd.google-apps.folder'
 
                 }
@@ -31,7 +31,7 @@ module.exports.folderCreation = async (req, res, next) => {
             let response3 = await drive.files.create({
                 requestBody: {
                     name: "Forms",
-                    parents: [url.slice(39)],
+                    parents: [url.slice(43)],
                     mimeType: 'application/vnd.google-apps.folder'
 
                 }
@@ -39,7 +39,7 @@ module.exports.folderCreation = async (req, res, next) => {
             let response4 = await drive.files.create({
                 requestBody: {
                     name: "Publicity",
-                    parents: [url.slice(39)],
+                    parents: [url.slice(43)],
                     mimeType: 'application/vnd.google-apps.folder'
                 }
             })
