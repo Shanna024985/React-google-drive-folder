@@ -8,6 +8,8 @@ import { Label } from "./label";
 import { createContext } from "react";
 import { CompletionScreen } from "./completionScreen";
 import { LoadingSpinner } from "./loaderSpinner";
+import useDrivePicker from 'react-google-drive-picker'
+
 export const updateProgressContext = createContext<Function | undefined>(
   undefined
 );
@@ -17,6 +19,7 @@ const MainPage = () => {
     useState<string>("hidden");
   let [urlForRedirect, setUrlForRedirect] = useState<string>("")
   useEffect(() => {
+    debugger
     setProgress(50);
 
     let token = localStorage.getItem("token");
@@ -80,6 +83,30 @@ function StepOneOfAddingFolders(props: {
   let input: null | any = useRef(null)
   let [classNameOfLoadingSpinner, setClassNameOfLoadingSpinner] = useState("hidden");
   let [classNameOfButtonTitle, setClassNameOfButtonTitle] = useState("")
+  const [openPicker] = useDrivePicker();  
+  // const customViewsArray = [new google.picker.DocsView()]; // custom view
+
+  const handleOpenPicker = () => {
+    if (typeof localStorage.getItem("refresh-token") == "string"){
+      openPicker({
+        clientId: "1019336648512-o7hsjp6s7mc22njrltl51l6t5nrsnro1.apps.googleusercontent.com",
+        developerKey: "AIzaSyD19zsEaPooB_JRF5oVVq6JhbNkt259yNE",
+        viewId: "FOLDERS",
+        // token: localStorage.getItem("refresh-token"), // pass oauth token in case you already have one
+        showUploadView: true,
+        showUploadFolders: true,
+        supportDrives: true,
+        // customViews: customViewsArray, // custom view
+        callbackFunction: (data) => {
+          if (data.action === 'cancel') {
+            console.log('User clicked cancel/close button')
+          }
+          console.log(data)
+        },
+      })
+    }
+    
+  }
   return (
     <div className={classNameOfDiv}>
       <h3 className="text-3xl mt-4 lg:mx-10">Step 1</h3>
@@ -88,7 +115,9 @@ function StepOneOfAddingFolders(props: {
       </h1>
       <div className="flex bg-gray-600 p-5 rounded-xl mt-10 mx-10 lg:mx-20">
         <div className="flex-1 flex justify-items-center place-content-center">
-          <Button className="self-center w-70 h-15 whitespace-normal text-left">
+          <Button className="self-center w-70 h-15 whitespace-normal text-left" onClick={()=>{
+            handleOpenPicker();
+          }}>
             <img src={googleDrive} alt="googleDrive" />
             <p className="w-50 flex break-words h-12 ml-2 font-semibold">
               Choose a folder from google drive
@@ -119,7 +148,7 @@ function StepOneOfAddingFolders(props: {
               if (typeof setProgressFunction === "function") {
                 setClassNameOfLoadingSpinner("");
                 setClassNameOfButtonTitle("hidden")
-                let  bodyData = JSON.stringify({refresh_token: localStorage.getItem("refresh-token"),url:input.current.value})
+                let  bodyData = JSON.stringify({refresh_token: localStorage.getItem("refresh-token"),url:input.current.value,access_token:localStorage.getItem("token")})
                 console.log(bodyData)
                 let fetchData = {
                   method: 'POST',
@@ -130,8 +159,8 @@ function StepOneOfAddingFolders(props: {
                 }
                 fetch("https://google-drive-folder-creation.onrender.com/api/drive",fetchData)
                 .then((value)=>{
-                  if (value.status === 400){
-                    console.error("Error 400")
+                  if (value.status != 200){
+                    console.error("Error")
                   } else {
                     return value.json();
                   }

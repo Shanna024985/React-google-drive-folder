@@ -9,6 +9,7 @@ export const LoginToGoogleButton = () => {
             return value.json()
         })
         .then((value)=>{
+          
             window.location.href = value.url
         })
         .catch(reason => console.error(reason))

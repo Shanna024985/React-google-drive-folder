@@ -1,18 +1,22 @@
 const { google } = require('googleapis');
 const { oauth2Client } = require('./authController');
+const drive = google.drive({ version: "v3", auth: oauth2Client })
 
 const fs = require("fs")
 const path = require("path")
-const drive = google.drive({ version: "v3", auth: oauth2Client })
 
 module.exports.folderCreation = async (req, res, next) => {
+    debugger
     if (req.body.refresh_token === undefined || req.body.url === undefined) {
         res.status(400).json({ message: "refresh_token and/or url is undefined in request body" })
     } else {
+        debugger
         let authObj = require("./authController").oauth2Client
-        authObj.setCredentials({ refresh_token: req.body.refresh_token })
+        authObj.setCredentials({ refresh_token: req.body.refresh_token, access_token: req.body.access_token })
+
         let url = req.body.url
         try {
+            debugger
             let response = await drive.files.create({
                 requestBody: {
                     name: "Proposal", 
@@ -28,6 +32,7 @@ module.exports.folderCreation = async (req, res, next) => {
 
                 }
             })
+            debugger
             let response3 = await drive.files.create({
                 requestBody: {
                     name: "Forms",
@@ -49,6 +54,7 @@ module.exports.folderCreation = async (req, res, next) => {
             console.log(response.data)
             next()
         } catch (error) {
+            debugger
             res.status(500).json(error)
         }
     }
