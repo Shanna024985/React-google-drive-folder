@@ -20,34 +20,34 @@ module.exports.folderCreation = async (req, res, next) => {
             let response = await drive.files.create({
                 requestBody: {
                     name: "Proposal", 
-                    parents: [url.slice(43)],
+                    parents: [url.slice(39)],
                     mimeType: 'application/vnd.google-apps.folder'
                 }
             })
             let response2 = await drive.files.create({
                 requestBody: {
                     name: "Finance and Logistics",
-                    parents: [url.slice(43)],
+                    parents: [url.slice(39)],
                     mimeType: 'application/vnd.google-apps.folder'
 
                 }
             })
             debugger
-            let response3 = await drive.files.create({
-                requestBody: {
-                    name: "Forms",
-                    parents: [url.slice(43)],
-                    mimeType: 'application/vnd.google-apps.folder'
+            // let response3 = await drive.files.create({
+            //     requestBody: {
+            //         name: "Forms",
+            //         parents: [url.slice(43)],
+            //         mimeType: 'application/vnd.google-apps.folder'
 
-                }
-            })
-            let response4 = await drive.files.create({
-                requestBody: {
-                    name: "Publicity",
-                    parents: [url.slice(43)],
-                    mimeType: 'application/vnd.google-apps.folder'
-                }
-            })
+            //     }
+            // })
+            // let response4 = await drive.files.create({
+            //     requestBody: {
+            //         name: "Publicity",
+            //         parents: [url.slice(43)],
+            //         mimeType: 'application/vnd.google-apps.folder'
+            //     }
+            // })
             res.locals.proposalFolder = response.data
             res.locals.financeFolder = response2.data
             res.locals.authObject = authObj
