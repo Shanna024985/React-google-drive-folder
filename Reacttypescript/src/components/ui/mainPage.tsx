@@ -172,6 +172,9 @@ function StepOneOfAddingFolders(props: {
                   console.log(input.current.value)
                   props.setUrlForRedirect(input.current.value)
                 })
+                .catch((e)=>{
+                  console.error(e);
+                })
               }
             }}
           >
